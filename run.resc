@@ -1,0 +1,9 @@
+using sysbus
+mach create "test"
+machine LoadPlatformDescription @renode/stm32f4.repl
+
+# Optional: UART terminal window
+showAnalyzer sysbus.uart2
+
+# Start the machine
+start

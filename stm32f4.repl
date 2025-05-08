@@ -1,0 +1,14 @@
+using sysbus
+name: STM32F4
+
+cpu: CortexM
+  cpuType: "cortex-m4"
+  entryPoint: 0x08000000
+  pc: 0x08000004
+
+sysbus:
+  init:
+    - load @build/main.elf
+
+  uart2: UART
+    -> sysbus:0x40004400
