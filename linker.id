@@ -33,6 +33,13 @@ SECTIONS
     . = . + 0x1000;
   } > RAM
 
+  . = ALIGN(4);
   __end__ = .;
   end = .;
+
+  /* ✅ Export these symbols so rdimon sees them */
+  PROVIDE(__bss_start__ = __bss_start__);
+  PROVIDE(__bss_end__ = __bss_end__);
+  PROVIDE(__end__ = __end__);
+  PROVIDE(end = end);
 }
