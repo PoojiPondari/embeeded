@@ -1,36 +1,35 @@
-MEMORY
-{
-  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 256K   /* Slightly reduced */
-  RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 32K    /* Reduced */
+ENTRY(Reset_Handler)
+
+MEMORY {
+  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 512K
+  RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
 }
 
-SECTIONS
-{
-  .isr_vector : {
-    KEEP(*(.isr_vector))
-  } > FLASH
-
+SECTIONS {
   .text : {
+    KEEP(*(.isr_vector))
     *(.text*)
     *(.rodata*)
+    _etext = .;
   } > FLASH
 
-  .data : {
+  .data : AT(_etext) {
+    _sdata = .;
     *(.data*)
-  } > RAM AT > FLASH
+    _edata = .;
+  } > RAM
 
   .bss : {
-    PROVIDE(__bss_start__ = .);
+    _sbss = .;
     *(.bss*)
     *(COMMON)
-    PROVIDE(__bss_end__ = .);
+    _ebss = .;
   } > RAM
 
-  .stack (NOLOAD) : {
+  .stack (COPY) : {
     . = ALIGN(8);
-    . = . + 0x800; /* Smaller stack: 2KB */
+    stack_start = .;
+    . = . + 0x800;
+    stack_end = .;
   } > RAM
-
-  PROVIDE(__end__ = .);
-  PROVIDE(end = .);
 }
