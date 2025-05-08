@@ -6,8 +6,11 @@ MEMORY
 
 SECTIONS
 {
-  .text : {
+  .isr_vector : {
     KEEP(*(.isr_vector))
+  } > FLASH
+
+  .text : {
     *(.text*)
     *(.rodata*)
   } > FLASH
@@ -27,11 +30,12 @@ SECTIONS
 
   .stack (NOLOAD) : {
     . = ALIGN(8);
-    __stack_start__ = .;
+    _stack_start = .;
     . = . + 0x1000;
-    __stack_end__ = .;
+    _stack_end = .;
   } > RAM
 
+  . = ALIGN(4);
   __end__ = .;
-  PROVIDE(end = .);
+  end = .;   /* Required for _sbrk */
 }
