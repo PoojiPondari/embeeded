@@ -11,9 +11,12 @@ SECTIONS
   } > FLASH
 
   .text : {
+    KEEP(*(.isr_vector))  /* this is critical */
     *(.text*)
     *(.rodata*)
-  } > FLASH
+    _etext = .;
+} > FLASH
+
 
   .data : {
     *(.data*)

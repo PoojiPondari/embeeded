@@ -1,14 +1,12 @@
-#include <stdint.h>
-
-extern int main(void);
-void Reset_Handler(void) {
-    main();
-}
-
-typedef void (*ISR_Handler)(void);
+void Reset_Handler(void);
 
 __attribute__((section(".isr_vector")))
-const ISR_Handler vector_table[] = {
-    (ISR_Handler)(uintptr_t)0x20001000,  // Initial Stack Pointer
-    Reset_Handler                        // Reset Handler
+void (* const vector_table[])(void) = {
+    (void (*)(void)) 0x20001000,  // Initial SP
+    Reset_Handler                 // Reset vector
 };
+
+void Reset_Handler(void) {
+    extern int main(void);
+    main();
+}
