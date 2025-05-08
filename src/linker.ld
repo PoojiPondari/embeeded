@@ -1,7 +1,7 @@
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 512K
-  RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 64K
+  FLASH (rx)  : ORIGIN = 0x08000000, LENGTH = 256K   /* Slightly reduced */
+  RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 32K    /* Reduced */
 }
 
 SECTIONS
@@ -19,7 +19,6 @@ SECTIONS
     *(.data*)
   } > RAM AT > FLASH
 
-  /* ✅ Explicitly export bss range to rdimon-crt0.o */
   .bss : {
     PROVIDE(__bss_start__ = .);
     *(.bss*)
@@ -29,10 +28,9 @@ SECTIONS
 
   .stack (NOLOAD) : {
     . = ALIGN(8);
-    . = . + 0x1000;
+    . = . + 0x800; /* Smaller stack: 2KB */
   } > RAM
 
-  . = ALIGN(4);
   PROVIDE(__end__ = .);
   PROVIDE(end = .);
 }
