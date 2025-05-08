@@ -5,7 +5,7 @@ GIT_SHA=$(git rev-parse HEAD)
 BUILD_TIME=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
 arm-none-eabi-gcc -mcpu=cortex-m3 -mthumb -Wall -g \
-  -T linker.ld \
+  -T src/linker.ld \
   -specs=rdimon.specs -lc -lrdimon \
   src/main.c -o build/firmware.elf
 
